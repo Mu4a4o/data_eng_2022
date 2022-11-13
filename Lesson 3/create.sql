@@ -67,12 +67,10 @@ CREATE table user_comment
 --смотрим связи на схеме
 data_engineer - GENERATE ERD
 
-
 -- генерируем данные
 http://filldb.info
-вставляем create table из дампа
 генерируем БД по 1.jpg,2.jpg,3.jpg
-export в beta
+export
 открываем запрос в pgAmin  и применяем
 
 
