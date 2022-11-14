@@ -30,7 +30,7 @@ SELECT datname FROM pg_database;
 --DROP TABLE  user_info CASCADE;
 --DROP TABLE  user_comment CASCADE;
 --DROP TABLE  comment_info CASCADE;
---TRUNCATE user_info CASCADE;;
+--TRUNCATE user_info CASCADE;
 
 -- создаем таблицу c юзерами
 create table user_info
@@ -46,7 +46,6 @@ CREATE table comment_info
 (
     comment_id INT UNIQUE, -- ид комента
     comment varchar(255) -- коммет
-    --FOREIGN KEY (comment_id)  REFERENCES user_attribute (comment_id)
 );
 
 -- создаем таблицу связку с атрибутами
@@ -58,7 +57,6 @@ CREATE table user_comment
     FOREIGN KEY (user_id)  REFERENCES user_info (number), -- связь с телефоном user_info.number
     FOREIGN KEY (comment_id)  REFERENCES comment_info (comment_id) -- связь с телефоном comment_info.comment_id
 );
-
 
 
 -- смотрим список таблиц
