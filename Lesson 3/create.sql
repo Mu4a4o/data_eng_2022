@@ -13,7 +13,7 @@
 createuser -h localhost -p 5432 -P -s -e den
 
 -- задаем пароль нашему юзеру
-CREATE ROLE den PASSWORD 'mu4a4o212' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
+CREATE ROLE dima PASSWORD 'e207ek' SUPERUSER CREATEDB CREATEROLE INHERIT LOGIN;
 
 -- создаем БД
 create database data_engineer;
