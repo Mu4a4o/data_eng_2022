@@ -46,8 +46,7 @@ CREATE table comment_info
 (
     comment_id INT UNIQUE, -- ид комента
     comment varchar(255) -- коммет
-    --FOREIGN KEY (comment_id)  REFERENCES user_attribute (comment_id)
-);
+    );
 
 -- создаем таблицу связку с атрибутами
 CREATE table user_comment
