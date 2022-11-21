@@ -1,8 +1,15 @@
 1.Нужно вывести все поля таблицы user_info у которых домен почты "hotmail".
 Если этого домена нет выбирите любой, который есть у вас!
+select "number", "name", email from public.user_info;
+select *from public.user_info where email = 'hotmail';
+select *from public.user_info where email = 'jdickinson@gmail.com';
 
 2.Требуется вывести поля ид и дата таблицы user_comment, которые появились в 1971 году.
 Если этого года нет выбирите любой, который есть у вас!
+select user_id, comment_id, created_at from public.user_comment;
+select *from public.user_comment where created_at >= '19710101' and created_at<= '19711231';
 
 3.Требуется вывести все поля таблицы user_comment, которые появились в 1972 году имеет коммент ид больше 60.
 Если этот год и коммент ид остутсвуют выбирите любые,которые есть у вас!
+select  user_id, comment_id, created_at from public.user_comment;
+select *from public.user_comment where created_at >= '19720101' and created_at<= '19721231'and comment_id >60;
