@@ -1,0 +1,25 @@
+1.Нужно вывести name таблицы user_info у которых имя начинается на "a".
+
+2.Нужно вывести name таблицы user_info у которых имя начинается на "a" или заканчивается на "b"
+
+3.Нужно вывести name таблицы user_info у которых имя начинается на "a" и заканчивается на "b" или в середине присутсвует "a"
+
+4.Создайте таблицу date_info.В ней должны присутсвовать поля:
+date_date в формате дата
+date_varchar_1 в формате varchar(255)
+date_varchar_2 в формате varchar(255)
+
+5.Вставьте значения при помощи скрипта ниже
+INSERT INTO public.date_info
+select t1,to_char(t1,'YYYY/MM/DD'),to_char(t1,'MMDDYY')  from generate_series('2021-03-01'::timestamptz,'2021-12-31'::timestamptz,'1 days') as t1
+
+6.Напишите запрос, который преобразует поле date_varchar_1 из varchar в формат date (поле date_date, как проверочное)
+
+7.Напишите запрос, который преобразует поле date_varchar_2 из varchar в формат date (поле date_date, как проверочное)
+
+8.Напишите запрос, который преобразует поле date_dat из date в формат varchar с маской YYYY/MM/DD (поле date_varchar_1, как проверочное)
+
+9.Напишите запрос, который преобразует поле date_dat из date в формат varchar с маской MMDDYY (поле date_varchar_2, как проверочное)
+
+10.Найдите  при помощи LIKE в поле date_varchar_1 даты за июль месяц
+
