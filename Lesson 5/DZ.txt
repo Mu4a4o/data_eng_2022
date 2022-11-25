@@ -23,3 +23,10 @@ select t1,to_char(t1,'YYYY/MM/DD'),to_char(t1,'MMDDYY')  from generate_series('2
 
 10.Найдите  при помощи LIKE в поле date_varchar_1 даты за июль месяц
 
+Доп.!!!
+
+1. Получите максимальную дату в date_info.Должно быть только поле date_date
+
+2. Получите максимальную дату по полю date_varchar_1 в date_info.Используйте две функции max() и to_date().Должно быть только поле date_varchar_1
+
+3. Получите диапозон дат от 2021-03-05 до 2021-03-07 по полю date_varchar_1 в date_info.Используйте BETWEEN и to_date().Должно быть только поле date_varchar_1
