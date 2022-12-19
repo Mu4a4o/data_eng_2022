@@ -1,0 +1,52 @@
+1.Нужно вывести name таблицы user_info у которых имя начинается на "a".
+select "name"
+from public.user_info
+where "name"  LIKE ('A%');
+
+2.Нужно вывести name таблицы user_info у которых имя начинается на "a" или заканчивается на "b"
+select "name"
+from public.user_info
+where "name" like ('A%') or "name" like  ('%b');
+
+3.Нужно вывести name таблицы user_info у которых имя начинается на "a" и заканчивается на "b" или в середине присутсвует "a"
+select "name"
+from public.user_info
+where "name" like ('A%') and "name" like  ('%b') or "name" like  ('%a%');
+
+4.Создайте таблицу date_info.В ней должны присутсвовать поля:
+date_date в формате дата
+date_varchar_1 в формате varchar(255)
+date_varchar_2 в формате varchar(255)
+
+create table date_info
+(date_date date,
+date_varchar_1 varchar(255),
+date_varchar_2 varchar(255));
+
+5.Вставьте значения при помощи скрипта ниже
+INSERT INTO public.date_info
+select t1,to_char(t1,'YYYY/MM/DD'),to_char(t1,'MMDDYY')  from generate_series('2021-03-01'::timestamptz,'2021-12-31'::timestamptz,'1 days') as t1
+
+alter table public.date_info
+add column t1 varchar(255);
+
+6.Напишите запрос, который преобразует поле date_varchar_1 из varchar в формат date (поле date_date, как проверочное)
+select to_date(date_varchar_1,'YYYY/MM/DD') as date_varchar_1
+from date_info;
+
+7.Напишите запрос, который преобразует поле date_varchar_2 из varchar в формат date (поле date_date, как проверочное)
+select to_date(date_varchar_2,'MMDDYY') as date_varchar_2
+from date_info;
+
+8.Напишите запрос, который преобразует поле date_dat из date в формат varchar с маской YYYY/MM/DD (поле date_varchar_1, как проверочное)
+select to_char(date_date,'YYYY/MM/DD' ) as date_date
+from date_info;
+
+9.Напишите запрос, который преобразует поле date_dat из date в формат varchar с маской MMDDYY (поле date_varchar_2, как проверочное)
+select to_char(date_date,'MMDDYY' ) as date_date
+from date_info;
+
+10.Найдите  при помощи LIKE в поле date_varchar_1 даты за июль месяц
+select *
+from public.date_info
+where date_varchar_1 like ('%/06/%');
