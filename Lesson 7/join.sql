@@ -1,7 +1,7 @@
 -- Таблицы для join
 
 create schema data_set;
-
+drop table data_set.subscriber_information_join;
 create table data_set.subscriber_information_join
 (id_abon VARCHAR(50) PRIMARY KEY,
 first_name VARCHAR(25),
@@ -18,22 +18,21 @@ insert into data_set.subscriber_information_join (id_abon,first_name,last_name,c
 insert into data_set.subscriber_information_join (id_abon,first_name,last_name,connection_date,trust_payment,number_of_internet_devices,number_of_tv_devices,comment_when_сonnecting) values ('3f8af854-26a1-449d-a4a7-9bcd06a17088','Hank','Collins','2020-01-09',1,1,2,'good');
 
 select * from data_set.subscriber_information_join;
-
 drop table data_set.period_traffic_join;
 create table data_set.period_traffic_join
 (id_abon VARCHAR(50),
 day DATE ,
 traffic_gb INT);
 
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('fdf40c5f-50d4-4d9f-a015-b5aece2aa944',to_date('01.02.2020','%d.%m.%Y'),462);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('fdf40c5f-50d4-4d9f-a015-b5aece2aa944',to_date('02.02.2020','%d.%m.%Y'),130);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('fdf40c5f-50d4-4d9f-a015-b5aece2aa944',to_date('03.02.2020','%d.%m.%Y'),316);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('d8e7f123-18f6-4c09-a683-d466ee1217e1',to_date('01.02.2020','%d.%m.%Y'),145);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('d8e7f123-18f6-4c09-a683-d466ee1217e1',to_date('02.02.2020','%d.%m.%Y'),182);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('d8e7f123-18f6-4c09-a683-d466ee1217e1',to_date('03.02.2020','%d.%m.%Y'),32);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('c069c890-e499-4593-99ec-163aaedbaa90',to_date('01.02.2020','%d.%m.%Y'),119);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('c069c890-e499-4593-99ec-163aaedbaa90',to_date('02.02.2020','%d.%m.%Y'),83);
-insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('acbfe937-0329-4ff6-9680-cbe1b866c8d1',to_date('01.02.2020','%d.%m.%Y'),217);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('fdf40c5f-50d4-4d9f-a015-b5aece2aa944','2020-02-01',462);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('fdf40c5f-50d4-4d9f-a015-b5aece2aa944','2020-02-02',130);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('fdf40c5f-50d4-4d9f-a015-b5aece2aa944','2020-02-03',316);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('d8e7f123-18f6-4c09-a683-d466ee1217e1','2020-02-01',145);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('d8e7f123-18f6-4c09-a683-d466ee1217e1','2020-02-02',182);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('d8e7f123-18f6-4c09-a683-d466ee1217e1','2020-02-03',32);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('c069c890-e499-4593-99ec-163aaedbaa90','2020-02-01',119);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('c069c890-e499-4593-99ec-163aaedbaa90','2020-02-02',83);
+insert into data_set.period_traffic_join (id_abon,day,traffic_gb) values ('acbfe937-0329-4ff6-9680-cbe1b866c8d1','2020-02-01',217);
 
 select * from  data_set.period_traffic_join;
 
@@ -63,7 +62,7 @@ from  data_set.subscriber_information_join;
 -- Левая таблица основная. Все ее строки сохраняются, там где нет совпадений по ключу правой таблицы в новых полях проставляются null
 select si.*, pt.day,pt.traffic_gb
 from  data_set.subscriber_information_join as si
-right join  data_set.period_traffic_join as pt
+left join  data_set.period_traffic_join as pt
 on pt.id_abon = si.id_abon;
 
 -- INNER JOIN горизонтальное объедиение таблиц
