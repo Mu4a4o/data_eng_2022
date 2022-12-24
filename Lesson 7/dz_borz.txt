@@ -6,14 +6,14 @@ from data_set.period_traffic_join;
 
 --2. Требуется получить сумарный трафик по каждому абоненту.
 select id_abon,
-      sum(traffic_gb)
+       sum(traffic_gb)
 from data_set.period_traffic_join
 group by id_abon;
 
 --3. Требуетя понять сколько абанетов было подключено за каждую дату.
 
 select count(connection_date) as CCD,
-connection_date
+       connection_date
 from data_set.subscriber_information_join
 group by connection_date;
 
@@ -21,7 +21,7 @@ group by connection_date;
 --1. Требуется вывести комментарий каждого абонента
 
 select ptj.id_abon,
-sij.comment_when_сonnecting
+       sij.comment_when_сonnecting
 from data_set.period_traffic_join ptj
 left join data_set.subscriber_information_join sij
 on ptj.id_abon = sij.id_abon;
@@ -29,7 +29,7 @@ on ptj.id_abon = sij.id_abon;
 --2. Требуется вывести имя,почту и id комментария всех абонентов
 
 select concat(sij.first_name,' ',sij.last_name) as FullName,
-		sij.comment_when_сonnecting
+	   sij.comment_when_сonnecting
 from data_set.period_traffic_join ptj
 left join data_set.subscriber_information_join sij
 on ptj.id_abon = sij.id_abon;
@@ -37,8 +37,7 @@ on ptj.id_abon = sij.id_abon;
 --Опциональное задание на LJ,т.к. тут участвуют три таблицы.
 --3. Требуется вывести id юзера,имя,id комментария,коммантарий и "created_at"
 
-select
-		uc.user_id,
+select  uc.user_id,
 		concat(sij.first_name,' ',sij.last_name) as FullName,
 		uc.comment_id,
 		sij.comment_when_сonnecting,
