@@ -1,0 +1,53 @@
+--Теперь я буду в основном давать неформализуемые задачи,т.е. будет общая задача без вводных данных(полей,алгоритмов,таблиц и т.д.).В проектах ни кто не дает конкретики.
+
+-- Group by (schema data_set)
+--1. Требуется получить общий трафик всех абонентов.+
+
+select
+sum(traffic_gb)
+from  data_set.period_traffic_join
+
+--2. Требуется получить сумарный трафик по каждому абоненту.+
+
+select id_abon,
+sum(traffic_gb)
+from  data_set.period_traffic_join
+group by id_abon;
+
+--3. Требуетя понять сколько абанетов было подключено за каждую дату.+
+
+select connection_date,
+count(id_abon)
+from  data_set.subscriber_information_join
+group by connection_date;
+
+--LJ (schema public)
+--1. Требуется вывести комментарий каждого абонента.+
+
+select uc.user_id,ci."comment"
+from public.user_comment as uc
+left join public.comment_info as ci
+on uc.comment_id = ci.comment_id;
+
+
+--2. Требуется вывести имя,почту и id комментария всех абонентов.+
+
+select ui.name, ui.email, uc.comment_id
+from public.user_comment as uc
+left join public.user_info as ui
+on uc.user_id = ui."number" ;
+
+
+--Опциональное задание на LJ,т.к. тут участвуют три таблицы.
+--3. Требуется вывести id юзера,имя,id комментария,коммантарий и "created_at".+
+
+select uc.user_id,
+ui."name",
+ci.comment_id,
+ci."comment",
+uc.created_at
+from public.user_comment as uc
+left join public.user_info as ui
+on uc.user_id =ui."number"
+left join public.comment_info as ci
+on uc.comment_id =ci.comment_id;
