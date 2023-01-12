@@ -1,0 +1,51 @@
+
+-- Public
+-- 1. Сгруппируйте по create_at,комментариям и именам.В качестве агрегации кол-во комментариев+
+
+select uc.created_at,
+ui."name",
+ci."comment",
+count(ci."comment") as count_comments
+from public.user_comment as uc
+left join public.user_info as ui
+on uc.user_id =ui. "number"
+left join public.comment_info as ci
+on uc.comment_id =ci.comment_id
+group by created_at, "comment", "name";
+
+-- 2. Сгруппируйте по create_at,комментариям и именам за 1970 г.В качестве агрегации кол-во комментариев+
+
+select uc.created_at,
+ui."name",
+ci."comment",
+count(ci."comment") as count_comments
+from public.user_comment as uc
+left join public.user_info as ui
+on uc.user_id =ui. "number"
+left join public.comment_info as ci
+on uc.comment_id =ci.comment_id
+where created_at between'1970-01-01' and '1970-12-31'
+group by created_at, "comment", "name";
+
+
+-- 3. Сгруппируйте по комментариям и именам за 1970 г. и где id комментариев больше 50 и где номера юзеров имеют в середине цифры 1,2,3,4,5 не сделала
+
+select
+ui."name",
+ci."comment",
+count(ci."comment") as count_comments
+from public.user_comment as uc
+left join public.user_info as ui
+on uc.user_id =ui. "number"
+left join public.comment_info as ci
+on uc.comment_id =ci.comment_id
+where (created_at between'1970-01-01' and '1970-12-31')
+and uc.comment_id > 50
+
+and (uc.user_id.text like ('%1%')
+or to_char(uc.user_id) like ('%2%')
+or to_char(uc.user_id) like ('%3%')
+or to_char(uc.user_id) like ('%4%')
+or to_char(uc.user_id) like ('%5%'))
+group by "comment", "name";
+

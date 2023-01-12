@@ -1,0 +1,38 @@
+-- Загрузим новую БД 'demo'
+-- 1. Заходим https://postgrespro.ru/docs/postgrespro/10/demodb-bookings-installation.html
+-- 2. Скачиваем файл demo-big.zip
+-- 3. Заходим в директорию куда он скачался и распаковываем его
+-- 4. Заходим в папку где лежит файл demo-big-20170815.sql (который мы распаковалм в 3 п.п.)
+-- 5. Находим путь к этому файлу. На верху в строке проводника. У меня 'C:\Users\3com\Downloads\demo-big\demo-big-20170815.sql'
+-- 6. Меняем символ "\" на "/" в имени пути с 'C:\Users\3com\Downloads\demo-big\demo-big-20170815.sql' на 'C:/Users/3com/Downloads/demo-big/demo-big-20170815.sql' и где нибудь сохраняем
+-- 7. В кнопке поиска рядом с Пуском (внизу) вбиваем  psql и открываем консоль SQL Shell(psql). Можно так-же найти в Пуске --> PostgreqSQL 15 --> SQL Shell(psql)
+-- 8. Server [localhost]: НАЖИМАЕМ ENTER (т.к. сервер по умолчанию localhost). В текущей папке Lesson 9 есть скрин img.png (пример моих данных)
+-- 9. Database [postgres]: data_engineer
+-- 10. Port [5432]:  НАЖИМАЕМ ENTER (т.к. порт по умолчанию 5432)
+-- 11. Username [postgres]: den (у вас свой)
+-- 12. Пароль пользователя den: вводите свой пароль (пароль при вводе не будет отображаться и это нормально)
+-- 13. Если все нормально, то внизу будет строка data_engineer=#
+-- 14. Вводите \i 'C:/Users/3com/Downloads/demo-big/demo-big-20170815.sql' .Путь к sql из 6 п.п.
+-- 15. Если появятся строки ниже, значит процесс пошёл. В конце отработки скрипта появится строка demo=#:
+            SET
+            SET
+            SET
+            SET
+            SET
+            SET
+            SET
+            SET
+            psql:C:/Users/3com/Downloads/demo-big/demo-big-20170815.sql:17: Р?РЁР?Р'Р?Р?:  Р+Р°Р·Р° Р?Р°Р?Р?С<С: "demo" Р?Рч С?С?С%РчС?С'Р?С?РчС'
+            CREATE DATABASE
+            Вы подключены к базе данных "demo" как пользователь "den".
+            ...
+            demo=#
+-- 16. Закрываем psql.Заходим в DBeaver и создаем новое подключение. На скрине в Lesson 9 dbeaver_conn_demo_1.png и dbeaver_conn_demo_2.png
+-- 17. Заходим в новую БД demo и проверяем наличие таблиц и кол-во данных по всем таблицам (new_db_demo.png и sel_count_tb.png)
+-- 18. Вы великолепны!!!
+
+Будет время ознакомьтесь со структурой БД
+Пояснения к БД
+Главная страница - https://postgrespro.ru/education/demodb
+Описание схемы - https://postgrespro.ru/docs/postgrespro/10/apjs03.html
+Описание полей - https://postgrespro.ru/docs/postgrespro/10/apjs04.html
