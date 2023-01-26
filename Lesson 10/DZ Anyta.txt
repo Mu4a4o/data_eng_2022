@@ -13,8 +13,7 @@ ad.model
 from bookings.flights as fl
 left join aircrafts_data as ad
 on fl.aircraft_code =ad.aircraft_code
-order by fl.scheduled_departure
-limit 1
+where fl.scheduled_departure = (select min(scheduled_departure) from bookings.flights)
 
 --3. Выясните есть модели самолетов без "Business" класса+
 
