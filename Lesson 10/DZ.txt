@@ -1,3 +1,33 @@
+-- https://postgrespro.ru/docs/postgrespro/10/apjs04.html
+
+-- bookings.ticket_flights
+--     Столбец     |     Тип       | Модификаторы |    Описание
+-------------------+---------------+--------------+---------------------
+-- ticket_no       | char(13)      | not null     | Номер билета
+-- flight_id       | integer       | not null     | Идентификатор рейса
+-- fare_conditions | varchar(10)   | not null     | Класс обслуживания
+-- amount          | numeric(10,2) | not null     | Стоимость перелет
+
+-- bookings.flights
+--       Столбец       |     Тип     | Модификаторы |          Описание
+-----------------------+-------------+--------------+-----------------------------
+-- flight_id           | serial      | not null     | Идентификатор рейса
+-- flight_no           | char(6)     | not null     | Номер рейса
+-- scheduled_departure | timestamptz | not null     | Время вылета по расписанию
+-- scheduled_arrival   | timestamptz | not null     | Время прилёта по расписанию
+-- departure_airport   | char(3)     | not null     | Аэропорт отправления
+-- arrival_airport     | char(3)     | not null     | Аэропорт прибытия
+-- status              | varchar(20) | not null     | Статус рейса
+-- aircraft_code       | char(3)     | not null     | Код самолета, IATA
+-- actual_departure    | timestamptz |              | Фактическое время вылета
+-- actual_arrival      | timestamptz |              | Фактическое время прилёта
+
+--    Столбец    |   Тип   | Модификаторы |             Описание
+-----------------+---------+--------------+-----------------------------------
+-- aircraft_code | char(3) | not null     | Код самолета, IATA
+-- model         | jsonb   | not null     | Модель самолета
+-- range         | integer | not null     | Максимальная дальность полета, км
+
 --1. Изучите структуру таблиц flights,ticket_flights,aircraft_data
 --Пояснения к БД
 --Главная страница - https://postgrespro.ru/education/demodb
@@ -6,12 +36,57 @@
 --Обратите внимание что модель в формате {"en": "Boeing 777-300", "ru": "Боинг 777-300"}.Пока вытаскиваем в таком ввиде,т.к. тип jsonb мы еще не проходили
 
 --2. Получите модель самолета, которая выполнила вылет раньше всех среди всех рейсов
+select ad.*,f.*
+from bookings.aircrafts_data ad
+left join bookings.flights f on f.aircraft_code = ad.aircraft_code
+where f.scheduled_departure = (select min(f2.scheduled_departure) from flights f2)
+
 
 --3. Выясните есть модели самолетов без "Business" класса
+select t1.*,ad2.*
+from bookings.aircrafts_data ad2
+left join
+(select ad.model ,tf.fare_conditions
+from bookings.aircrafts_data ad
+left join bookings.flights f on f.aircraft_code = ad.aircraft_code
+left join bookings.ticket_flights tf on f.flight_id = tf.flight_id
+group by ad.aircraft_code,tf.fare_conditions
+having tf.fare_conditions is not null and tf.fare_conditions = 'Business'
+order by ad.aircraft_code,tf.fare_conditions) t1
+on t1.model = ad2.model
+where t1.model is null;
+
 
 --4. Получите классы ('Economy', 'Comfort', 'Business') в процентом соотношении у каждой модели по рейсам,которые были осуществленны за 2017 год.
-    Пример вывода (сам не проверял)
-                        Model                           Тип         Мест        %
-    {"en": "Boeing 777-300", "ru": "Боинг 777-300"}  'Economy'       70        70
-    {"en": "Boeing 777-300", "ru": "Боинг 777-300"}  'Comfort'       20        20
-    {"en": "Boeing 777-300", "ru": "Боинг 777-300"}  'Business'      10        10
+--    Пример вывода (сам не проверял)
+--                        Model                           Тип         Мест        %
+--    {"en": "Boeing 777-300", "ru": "Боинг 777-300"}  'Economy'       70        70
+--    {"en": "Boeing 777-300", "ru": "Боинг 777-300"}  'Comfort'       20        20
+--    {"en": "Boeing 777-300", "ru": "Боинг 777-300"}  'Business'      10        10
+
+-- 5. получаем процент с двумя знаками после запятой
+select sum_pl.model,
+sum_pl.fare_conditions,
+sum_pl.max_place,
+sum_pl.sum_place,
+ROUND(100/(sum_pl.sum_place/sum_pl.max_place),2) as perc_place
+from
+-- 4. получаем общее кол-во мест
+(select col_mod.model,
+col_mod.fare_conditions,
+col_mod.max_place,
+sum(col_mod.max_place) over (partition by col_mod.model) as sum_place
+from
+-- 3. схлопываем по моделям,классам и максимальному кол-ву
+(select distinct  max_f.model,max_f.fare_conditions,max_f.max_place
+from
+-- 2. получаем максимальное кол-во пассажиров по моделям и классам
+(select ad.model,tf_1.fare_conditions,tf_1.co_,max(co_) over (partition by ad.model,tf_1.fare_conditions) as max_place
+from
+-- 1. получаем кол-во мест по рейсам и классам
+(select tf.flight_id,tf.fare_conditions,count(*) as co_
+from ticket_flights tf
+group by tf.flight_id,tf.fare_conditions) as tf_1
+left join bookings.flights f on f.flight_id =tf_1.flight_id
+left join bookings.aircrafts_data ad on ad.aircraft_code = f.aircraft_code) as max_f
+order by  max_f.model,max_f.fare_conditions) as col_mod) as sum_pl
