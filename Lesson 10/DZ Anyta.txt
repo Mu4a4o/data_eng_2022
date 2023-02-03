@@ -15,13 +15,12 @@ left join aircrafts_data as ad
 on fl.aircraft_code =ad.aircraft_code
 where fl.scheduled_departure = (select min(scheduled_departure) from bookings.flights)
 
---3. Выясните есть модели самолетов без "Business" класса+
+--3. Выясните есть модели самолетов без "Business" класса
 
-select distinct
-ad.aircraft_code,
-ad.model
-from aircrafts_data as ad
-where not exists(select * from seats s where ad.aircraft_code = s.aircraft_code and s.fare_conditions = 'Business')
+
+
+
+
 
 
 --4. Получите классы ('Economy', 'Comfort', 'Business') в процентом соотношении у каждой модели по рейсам,которые были осуществленны за 2017 год.-
