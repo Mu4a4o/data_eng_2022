@@ -1,0 +1,103 @@
+-2. Получите модель самолета, которая выполнила вылет раньше всех среди всех рейсов
+--group by
+
+select distinct ad.model,
+		f.scheduled_departure
+from bookings.aircrafts_data as ad
+left join bookings.flights as f
+on ad.aircraft_code=f.aircraft_code
+order by f.scheduled_departure asc
+limit 2;
+
+select distinct ad.model,
+		f.scheduled_departure
+from bookings.aircrafts_data as ad
+left join bookings.flights as f
+on ad.aircraft_code=f.aircraft_code
+where f.scheduled_departure = (select min(scheduled_departure) from bookings.flights);
+
+
+--3. Выясните есть модели самолетов без "Business" класса
+
+select *
+from bookings.aircrafts_data as ad
+left join bookings.flights as f
+on ad.aircraft_code = f.aircraft_code
+left join bookings.ticket_flights as tf
+on f.flight_id = tf.flight_id
+where tf.fare_conditions not like ('Business');
+
+
+select ad.model,
+		ad.aircraft_code,
+		f.flight_id
+from bookings.aircrafts_data as ad
+left join bookings.flights as f
+on ad.aircraft_code = f.aircraft_code
+where f.flight_id in (select tf.flight_id
+							from bookings.ticket_flights as tf
+							where tf.fare_conditions not like ('Business'));
+-- 1. Получите номера билетов,номера рейсов,моделм самолетов и города (ticket_flights,flights,aircrafts_data,airports_data)
+select tf.ticket_no,
+		f.flight_no,
+		ad.model,
+		ad2.city
+from bookings.ticket_flights as tf
+left join bookings.flights as f
+on tf.flight_id = f.flight_id
+left join bookings.aircrafts_data as ad
+on f.aircraft_code = ad.aircraft_code
+left join bookings.airports_data as ad2
+on f.departure_airport = ad2.airport_code;
+
+-- 2. Сгруппируйте по городам и классам обслуживания (join arrival_airport) и выясните их кол-во по городам за все время  (airports_data,flights,ticket_flights)
+--        Moscow Economy 200
+--        Moscow Comfort 300
+--        Moscow Business 50
+--        ...
+
+select ad.city,
+		tf.fare_conditions,
+		f.arrival_airport,
+		count(ad.city)
+from bookings.flights as f
+left join bookings.ticket_flights as tf
+on f.flight_id = tf.flight_id
+left join bookings.airports_data as ad
+on f.departure_airport = ad.airport_code
+group by ad.city,
+		f.arrival_airport,
+	    tf.fare_conditions;
+
+-- 3. Выполните 2 п.п. только вместо  Economy -> Эконом, Comfort - Комфорт, Business - Бизнес (Lesson 5-func.sql)
+select ad.city,
+		tf.fare_conditions,
+		f.arrival_airport,
+		count(ad.city)
+from bookings.flights as f
+left join bookings.ticket_flights as tf
+on f.flight_id = tf.flight_id
+left join bookings.airports_data as ad
+on f.departure_airport = ad.airport_code
+group by ad.city,
+		f.arrival_airport,
+	    tf.fare_conditions,
+	  	case  tf.fare_conditions
+	  		when Economy then 'Эконом'
+	  		when Comfort then 'Комфорт'
+	  		when Business then 'Бизнес'
+	  		else 'не указано'
+	  end;
+
+
+-- 4. Выведите только пустые строки фактического временм вылетов И фактического времи прилётов (flights)
+	   select *
+	   from bookings.flights as f
+	   where f.actual_departure is null and f.actual_arrival is null;
+
+-- 5. Выведите только не пустые строки фактического временм вылетов И фактического времи прилётов (flights)
+	   select *
+	   from bookings.flights as f
+	   where f.actual_departure is not null and f.actual_arrival is not null;
+
+-- 6. Выведите только пустые строки фактического временм вылетов И фактического времи прилётов И вместо пустых строк сделайте текущее
